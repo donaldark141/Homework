@@ -14,8 +14,8 @@ logging.basicConfig(level=logging.INFO,
 unicode = re.compile(r'[^\x00-\x7f]')
 
 
-async def fetch(url, session):
-     with session.get(url) as response:
+async def fetch(url, session):        
+    async with session.get(url) as response:
         return await response.text()  
         
 
@@ -26,10 +26,10 @@ async def crawler():
     api_url_main='http://db.chgk.info/last'
     api_url='http://db.chgk.info{tour}'
     session = ClientSession()       
-    r = fetch(api_url_main, session)
+    r = await fetch(api_url_main, session)
     tree = lxml.html.fromstring(r)
-    refs1 = tree.xpath('tr[@class == "odd"]/td/a/@href')
-    refs2 = tree.xpath('tr[@class == "even"]/td/a/@href')
+    refs1 = tree.xpath('tr[@class = "odd"]/td/a/@href')
+    refs2 = tree.xpath('tr[@class = "even"]/td/a/@href')
     for i in refs1:        
         r = fetch(api_url.format(tour=i), session)
         tree = lxml.html.fromstring(r)
