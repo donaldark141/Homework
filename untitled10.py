@@ -26,24 +26,26 @@ async def crawler():
     api_url_main='http://db.chgk.info/last'
     api_url='http://db.chgk.info{tour}'
     session = ClientSession()       
-    r = await fetch(api_url_main, session)
+    r = await fetch(api_url_main, session)    
     tree = lxml.html.fromstring(r)
-    refs1 = tree.xpath('tr[@class = "odd"]/td/a/@href')
-    refs2 = tree.xpath('tr[@class = "even"]/td/a/@href')
+    refs1 = tree.xpath('//tr[@class = "odd"]/td/a/@href')
+    refs2 = tree.xpath('//tr[@class = "even"]/td/a/@href')
+    
     for i in refs1:        
-        r = fetch(api_url.format(tour=i), session)
+        r = await fetch(api_url.format(tour=i), session)
         tree = lxml.html.fromstring(r)
         text = tree.xpath('//strong[@class="question"]/text()')
         text = '-Question '.join(text)
         text = tree.xpath('//strong[@class="Answer"]/text()')
         text = '-Asnwer '.join(text)
     for j in refs2:        
-        r = fetch(api_url.format(tour=j), session)
+        r = await fetch(api_url.format(tour=j), session)
         tree = lxml.html.fromstring(r)
         text = tree.xpath('//strong[@class="question"]/text()')
         text = '-Question '.join(text)
         text = tree.xpath('//strong[@class="Answer"]/text()')
         text = '-Asnwer '.join(text)
+    print(text)    
     return text
 
     
