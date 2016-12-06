@@ -11,30 +11,27 @@ def foldr(f, x0, lst):
     return f(lst[0], foldr(f, x0, lst[1:]))
     
     
-def foldr2(f, x0, lst):
-    lst1=lst[::-1]
-    return foldl(f, x0, lst1)
-    
 def foldl2(f, x0, lst):
-    lst1=lst[::-1]
-    return foldr(f, x0, lst1)
-
+    return foldr(lambda x,y: lambda u: y(f(u,x)), lambda x: x, lst)(x0)
+    
+def foldr2(f, x0, lst):
+    return foldl(lambda y,x: lambda u: y(f(x,u)), lambda x: x, lst)(x0)
 
 
 
 
 # Задание 2
+from collections import Counter
+
 def check_inv(a, b):
-    sB = (b)
-    dcb = {k:b.count(k) for k in sB}
+    cnt_b = Counter(b)
     i = 0
-    while i <= (len(a) - len(b)):
-        sSb = (a[i:i + len(b)])
-        dSb = {k:b.count(k) for k in sSb}
-        if sB == sSb and all(dcb[k]==dSb[k] for k in sB) : 
-            return True
+    while(i <= len(a) - len(b)):
+        cnt_sub_a = Counter(a[i:i + len(b)])
+        if cnt_b==cnt_sub_a:
+            return True            
         i+=1
-    return False         
+    return False     
 
 
 
