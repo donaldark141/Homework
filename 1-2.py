@@ -11,27 +11,30 @@ def foldr(f, x0, lst):
     return f(lst[0], foldr(f, x0, lst[1:]))
     
     
-def foldl2(f, x0, lst):
+def foldlnew(f, x0, lst):
     return foldr(lambda x,y: lambda u: y(f(u,x)), lambda x: x, lst)(x0)
     
-def foldr2(f, x0, lst):
+def foldrnew(f, x0, lst):
     return foldl(lambda y,x: lambda u: y(f(x,u)), lambda x: x, lst)(x0)
 
 
 
 
 # Задание 2
-from collections import Counter
+import collections
 
 def check_inv(a, b):
-    cnt_b = Counter(b)
+    b_counter = collections.Counter(b)
     i = 0
     while(i <= len(a) - len(b)):
-        cnt_sub_a = Counter(a[i:i + len(b)])
-        if cnt_b==cnt_sub_a:
+        a_plus_counter = collections.Counter(a[i:i + len(b)])
+        if a_plus_counter==b_counter:
             return True            
         i+=1
-    return False     
+    return False
+a = 'abcrotm'
+b = 'tro'
+print(check_inv(a,b))  
 
 
 
